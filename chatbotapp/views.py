@@ -6,23 +6,35 @@ from django.contrib.auth.models import User
 from .models import Chat
 from django.utils import timezone
 
-openai_api_key = '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'
+openai_api_key = 'sk-NG...........................zHb5E'
 openai.api_key = openai_api_key
 
 def ask_openai(message):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": message},
-        ]
+    # response = openai.ChatCompletion.create(
+    #     model="gpt-3.5-turbo",
+    #     messages=[
+    #         {"role": "system", "content": "You are a helpful assistant."},
+    #         {"role": "user", "content": message},
+    #     ]
+    # )
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=message,
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.7
     )
     print(response)
-    answer = response.choices[0].message.content.strip()
+    # answer = response.choices[0].message.content.strip()
+    answer = response.choices[0].text.strip()
     return answer
 
 def chatbot(request):
-    chats = Chat.objects.filter(user=request.user)
+    if request.user.is_authenticated:
+        chats = Chat.objects.filter(user=request.user)
+    else:
+        chats = []
     if request.method == 'POST':
         message = request.POST.get('message')
         response = ask_openai(message)

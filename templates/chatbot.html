@@ -77,6 +77,8 @@
     {% endif %}
     <div class="card-body messages-box">
       <ul class="list-unstyled messages-list">
+        {% if user.is_authenticated %}
+        <div></div>
         {% for chat in chats %}
         <div></div>
         {% if chat.user == request.user %}
@@ -101,6 +103,10 @@
         {% endif %}
         <div></div>
         {% endfor %}
+        <div></div>
+        {% else %}
+        <div></div>
+        {% endif %}
       </ul>
     </div>
     <br /><br />
@@ -109,6 +115,8 @@
   </div>
   <form class="message-form">
     {%csrf_token%}
+    <div></div>
+    {% if user.is_authenticated %}
     <div class="input-group">
       <input
         type="text"
@@ -119,6 +127,7 @@
         <button type="submit" class="btn btn-primary btn-send">Send</button>
       </div>
     </div>
+    {% endif %}
   </form>
 </div>
 
